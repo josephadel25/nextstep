@@ -68,16 +68,16 @@ This project can be run locally via Python virtual environments or seamlessly us
 
 ### Method 1: Using Docker (Recommended)
 
-1. **Build and Run all services** (assuming you have a `docker-compose.yml` set up):
+1. **Build and Run all services** (Gateway, Backend, AI, and Database):
    ```bash
    docker-compose up --build -d
    ```
-   *This will spin up both the backend and AI services.*
+   *This single command spins up the database, both AI and backend APIs, and the Nginx API gateway.*
 
 2. **Access the application:**
-   * Frontend: Open `index.html` in your browser or run a simple server (`python -m http.server 8080`)
-   * Backend API: `http://localhost:8000`
-   * AI Service API: `http://localhost:8001`
+   * **Frontend:** `http://localhost/` (or `http://localhost:8080/`)
+   * **Backend API (via Gateway):** `http://localhost/api/`
+   * **Direct AI Service API:** `http://localhost:8001`
 
 ### Method 2: Local Setup (Without Docker)
 

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: nginx:alpine
+    container_name: nextstep-gateway
+    ports:
+      - "80:80"
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nextstep-backend
+    environment:
+      - DATABASE_URL=mysql+pymysql://root:password@db:3306/nextstep
+      - AI_SERVICE_URL=http://ai-service:8001/parse
+      - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
+    depends_on:
+      - db
+      - ai-service
+    restart: always
+
+  ai-service:
+    build:
+      context: ./ai_service
+      dockerfile: Dockerfile
+    container_name: nextstep-ai-service
+    restart: always
+
+  db:
+    image: mysql:8.0
+    container_name: nextstep-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=nextstep
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  db_data:
