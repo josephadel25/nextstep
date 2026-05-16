@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - NextStep</title>
+  <meta name="description" content="Join NextStep and start your AI-powered career journey.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="nextstep.css">
+  <style>
+    body{display:flex;flex-direction:column;min-height:100vh;}
+    .auth-wrapper{display:flex;flex:1;min-height:100vh;}
+    .auth-left{flex:1;background:linear-gradient(145deg,#0a0f1e 0%,#0d1f3a 50%,#1a1040 100%);padding:3rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+    .auth-left .orb1{width:400px;height:400px;background:rgba(99,102,241,0.2);top:-100px;right:-100px;}
+    .auth-left .orb2{width:280px;height:280px;background:rgba(16,185,129,0.15);bottom:100px;left:-60px;animation-delay:-4s;}
+    .auth-left-brand a{display:inline-flex;align-items:center;gap:10px;font-family:"Plus Jakarta Sans",sans-serif;font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;}
+    .auth-left-brand .brand-icon{width:40px;height:40px;background:var(--accent-grad);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:0 0 20px var(--accent-glow);}
+    .auth-left-brand span{color:var(--accent-light);}
+    .auth-left-content,.auth-left-brand,.auth-left-footer{position:relative;z-index:1;}
+    .auth-left-content h2{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:#fff;margin-bottom:1rem;line-height:1.2;}
+    .auth-left-content p{color:rgba(255,255,255,0.6);font-size:0.95rem;line-height:1.7;max-width:340px;}
+    .stats-row{margin-top:2.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+    .stat-item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1rem;text-align:center;}
+    .stat-item .stat-num{font-size:1.5rem;font-weight:800;color:#fff;display:block;}
+    .stat-item .stat-lbl{font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;}
+    .auth-left-footer{color:rgba(255,255,255,0.3);font-size:0.78rem;}
+    .auth-right{width:500px;flex-shrink:0;background:var(--bg-card);display:flex;align-items:center;justify-content:center;padding:3rem 2.5rem;border-left:1px solid var(--border-subtle);overflow-y:auto;}
+    .auth-form-wrap{width:100%;max-width:400px;padding:0.5rem 0;}
+    .auth-form-wrap h1{font-size:1.75rem;font-weight:800;color:#fff;margin-bottom:0.4rem;}
+    .auth-form-wrap .subtitle{color:var(--text-muted);font-size:0.875rem;margin-bottom:1.75rem;}
+    .auth-form-wrap .subtitle a{color:var(--accent-light);font-weight:600;}
+    .auth-form-wrap .subtitle a:hover{color:#fff;}
+    .role-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem;}
+    .role-toggle input{display:none;}
+    .role-toggle label{padding:14px;border:2px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:var(--transition);color:var(--text-muted);}
+    .role-toggle label .role-icon{font-size:1.4rem;margin-bottom:6px;display:block;}
+    .role-toggle label .role-name{font-size:0.85rem;font-weight:600;display:block;}
+    .role-toggle label .role-desc{font-size:0.72rem;margin-top:2px;display:block;}
+    .role-toggle input:checked + label{border-color:var(--accent);background:rgba(99,102,241,0.12);color:#fff;}
+    .input-wrap{position:relative;margin-bottom:1rem;}
+    .input-wrap label{display:block;font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:6px;}
+    .input-wrap input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);padding:13px 16px 13px 42px;color:var(--text-primary);font-family:var(--font-main);font-size:0.9rem;transition:var(--transition);outline:none;}
+    .input-wrap input::placeholder{color:var(--text-muted);}
+    .input-wrap input:focus{border-color:var(--accent);background:rgba(99,102,241,0.06);box-shadow:0 0 0 3px rgba(99,102,241,0.15);}
+    .input-wrap input.is-invalid{border-color:var(--danger);}
+    .input-wrap .field-icon{position:absolute;left:14px;top:38px;color:var(--text-muted);font-size:0.82rem;}
+    .input-wrap .toggle-pwd{position:absolute;right:14px;top:38px;background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;font-size:0.82rem;}
+    .input-wrap .toggle-pwd:hover{color:var(--accent-light);}
+    .field-error{color:#fca5a5;font-size:0.78rem;margin-top:4px;display:none;}
+    .field-error.show{display:block;}
+    .pwd-strength{margin-top:8px;}
+    .pwd-strength-bar{height:3px;background:rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;}
+    .pwd-strength-fill{height:100%;width:0;border-radius:10px;transition:width 0.3s,background 0.3s;}
+    .pwd-strength-label{font-size:0.72rem;color:var(--text-muted);margin-top:4px;}
+    .terms-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:1.25rem;color:var(--text-muted);font-size:0.8rem;}
+    .terms-row input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;margin-top:2px;flex-shrink:0;}
+    .terms-row a{color:var(--accent-light);}
+    .btn-submit{width:100%;padding:14px;background:var(--accent-grad);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-main);font-size:0.9375rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px var(--accent-glow);}
+    .btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--accent-glow);}
+    .btn-submit:disabled{opacity:0.65;pointer-events:none;}
+    #regError{display:none;padding:12px 14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);margin-bottom:1.25rem;color:#fca5a5;font-size:0.875rem;align-items:center;gap:8px;}
+    .mini-spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+    .btn-spinner{display:none;}
+    .btn-spinner.show{display:inline-block;}
+    @media(max-width:768px){.auth-left{display:none;}.auth-right{width:100%;border-left:none;}}
+  </style>
+</head>
+<body>
+<div class="auth-wrapper">
+  <div class="auth-left">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="auth-left-brand">
+      <a href="../index.html">
+        <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+        Next<span>Step</span>
+      </a>
+    </div>
+    <div class="auth-left-content">
+      <h2>Join 10,000+<br>professionals today</h2>
+      <p>Whether you are a candidate looking to land your dream role or a recruiter building a world-class team, NextStep has everything you need.</p>
+      <div class="stats-row">
+        <div class="stat-item"><span class="stat-num">10K+</span><span class="stat-lbl">Users</span></div>
+        <div class="stat-item"><span class="stat-num">500+</span><span class="stat-lbl">Companies</span></div>
+        <div class="stat-item"><span class="stat-num">95%</span><span class="stat-lbl">Placement</span></div>
+      </div>
+    </div>
+    <div class="auth-left-footer">2026 NextStep Platform. All rights reserved.</div>
+  </div>
+  <div class="auth-right">
+    <div class="auth-form-wrap page-enter">
+      <h1>Create your account</h1>
+      <p class="subtitle">Already have an account? <a href="login.html">Sign in</a></p>
+      <div id="regError"><i class="fa fa-circle-exclamation"></i><span id="regErrorMsg"> Please fix the errors above.</span></div>
+      <form id="registerForm" novalidate autocomplete="on">
+        <div style="margin-bottom:1.25rem;">
+          <p style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">I am a...</p>
+          <div class="role-toggle">
+            <input type="radio" name="role" id="roleCandidate" value="candidate" checked>
+            <label for="roleCandidate">
+              <span class="role-icon">&#128100;</span>
+              <span class="role-name">Candidate</span>
+              <span class="role-desc">Looking for a job</span>
+            </label>
+            <input type="radio" name="role" id="roleRecruiter" value="recruiter">
+            <label for="roleRecruiter">
+              <span class="role-icon">&#128188;</span>
+              <span class="role-name">Recruiter</span>
+              <span class="role-desc">Hiring talent</span>
+            </label>
+          </div>
+        </div>
+        <div class="input-wrap">
+          <label for="regName">Full Name</label>
+          <i class="fa fa-user field-icon"></i>
+          <input type="text" id="regName" placeholder="Jane Doe" autocomplete="name" required>
+          <div class="field-error" id="nameErr">Please enter your full name.</div>
+        </div>
+        <div class="input-wrap">
+          <label for="regEmail">Email Address</label>
+          <i class="fa fa-envelope field-icon"></i>
+          <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" required>
+          <div class="field-error" id="emailErr">Please enter a valid email address.</div>
+        </div>
+        <div class="input-wrap">
+          <label for="regPassword">Password</label>
+          <i class="fa fa-lock field-icon"></i>
+          <input type="password" id="regPassword" placeholder="Min. 8 characters" autocomplete="new-password" required minlength="8">
+          <button type="button" class="toggle-pwd" id="togglePwd"><i class="fa fa-eye" id="toggleIcon"></i></button>
+          <div class="field-error" id="pwdErr">Password must be at least 8 characters.</div>
+          <div class="pwd-strength">
+            <div class="pwd-strength-bar"><div class="pwd-strength-fill" id="pwdStrengthFill"></div></div>
+            <div class="pwd-strength-label" id="pwdStrengthLabel"></div>
+          </div>
+        </div>
+        <div class="terms-row">
+          <input type="checkbox" id="terms">
+          <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+        </div>
+        <button type="submit" class="btn-submit" id="regBtn">
+          <span class="btn-spinner" id="btnSpinner"><div class="mini-spin"></div></span>
+          <i class="fa fa-user-plus" id="btnIcon"></i>
+          <span id="btnLabel">Create Account</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById('togglePwd').addEventListener('click',function(){
+  var inp=document.getElementById('regPassword');
+  var icon=document.getElementById('toggleIcon');
+  if(inp.type==='password'){inp.type='text';icon.className='fa fa-eye-slash';}
+  else{inp.type='password';icon.className='fa fa-eye';}
+});
+document.getElementById('regPassword').addEventListener('input',function(){
+  var pwd=this.value;
+  var fill=document.getElementById('pwdStrengthFill');
+  var lbl=document.getElementById('pwdStrengthLabel');
+  if(!pwd){fill.style.width='0';lbl.textContent='';return;}
+  var score=0;
+  if(pwd.length>=8)score++;
+  if(/[A-Z]/.test(pwd))score++;
+  if(/[0-9]/.test(pwd))score++;
+  if(/[^A-Za-z0-9]/.test(pwd))score++;
+  var colors=['#ef4444','#f59e0b','#10b981','#6366f1'];
+  var labels=['Weak','Fair','Good','Strong'];
+  fill.style.width=(score*25)+'%';
+  fill.style.background=colors[score-1]||'#ef4444';
+  lbl.textContent=labels[score-1]||'';
+  lbl.style.color=colors[score-1]||'#ef4444';
+});
+document.getElementById('registerForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=document.getElementById('regName').value.trim();
+  var email=document.getElementById('regEmail').value.trim();
+  var pwd=document.getElementById('regPassword').value;
+  var terms=document.getElementById('terms').checked;
+  var errBox=document.getElementById('regError');
+  var valid=true;
+  document.querySelectorAll('.field-error').forEach(function(el){el.classList.remove('show');});
+  if(!name){document.getElementById('nameErr').classList.add('show');document.getElementById('regName').classList.add('is-invalid');valid=false;}
+  if(!email||!/\S+@\S+\.\S+/.test(email)){document.getElementById('emailErr').classList.add('show');document.getElementById('regEmail').classList.add('is-invalid');valid=false;}
+  if(!pwd||pwd.length<8){document.getElementById('pwdErr').classList.add('show');document.getElementById('regPassword').classList.add('is-invalid');valid=false;}
+  if(!terms){document.getElementById('regErrorMsg').textContent=' Please accept the terms and conditions.';errBox.style.display='flex';valid=false;}
+  if(!valid)return;
+  errBox.style.display='none';
+  var btn=document.getElementById('regBtn');
+  var spinner=document.getElementById('btnSpinner');
+  var icon=document.getElementById('btnIcon');
+  var label=document.getElementById('btnLabel');
+  btn.disabled=true;spinner.classList.add('show');icon.style.display='none';label.textContent='Creating account...';
+  var role=document.querySelector('input[name="role"]:checked').value;
+  fetch('http://13.53.39.78/api/auth/register', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name: name, email: email, password: pwd, role: role})
+  }).then(function(res) {
+    if(!res.ok) {
+        return res.json().then(function(data) { throw new Error(data.detail || 'Registration failed'); });
+    }
+    return res.json();
+  }).then(function(data) {
+    btn.disabled=false;spinner.classList.remove('show');icon.style.display='';label.textContent='Create Account';
+    alert('Account created successfully! Please sign in to continue.');
+    window.location.href='login.html';
+  }).catch(function(err) {
+    btn.disabled=false;spinner.classList.remove('show');icon.style.display='';label.textContent='Create Account';
+    document.getElementById('regErrorMsg').textContent=' ' + err.message;
+    errBox.style.display='flex';
+  });
+});
+['regName','regEmail','regPassword'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){this.classList.remove('is-invalid');});
+});
+</script>
+</body>
+</html>

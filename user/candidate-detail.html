@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Detail - NextStep</title>
+  <meta name="description" content="Review this candidate profile and update their hiring status.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="nextstep.css">
+  <style>
+    .ns-navbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,15,30,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-subtle);}
+    .nav-brand{display:flex;align-items:center;gap:10px;font-family:"Plus Jakarta Sans",sans-serif;font-size:1.2rem;font-weight:800;color:#fff;text-decoration:none;}
+    .nav-brand .brand-icon{width:34px;height:34px;background:var(--accent-grad);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;}
+    .nav-brand span{color:var(--accent-light);}
+    .nav-links{display:flex;align-items:center;gap:8px;}
+    .nav-links a{color:var(--text-muted);font-size:0.85rem;padding:7px 14px;border-radius:8px;transition:var(--transition);}
+    .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.07);}
+    .main-content{padding-top:72px;}
+    .breadcrumb-bar{padding:1.25rem 2rem;background:rgba(15,23,42,0.8);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-muted);}
+    .breadcrumb-bar a{color:var(--accent-light);text-decoration:none;display:flex;align-items:center;gap:6px;transition:var(--transition);}
+    .breadcrumb-bar a:hover{color:#fff;}
+    .breadcrumb-bar .sep{color:var(--text-muted);}
+    .container{max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .detail-body{padding:2.5rem 0;}
+    .detail-grid{display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start;}
+    .candidate-hero-card{background:rgba(17,24,39,0.8);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1.5rem;}
+    .big-avatar{width:80px;height:80px;border-radius:50%;background:var(--accent-grad);display:flex;align-items:center;justify-content:center;font-family:"Plus Jakarta Sans",sans-serif;font-size:1.75rem;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 0 28px var(--accent-glow);}
+    .hero-info h1{font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:0.25rem;}
+    .hero-info .job-title{color:var(--accent-light);font-size:0.9rem;font-weight:600;margin-bottom:0.5rem;}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:0.75rem;}
+    .hero-meta-item{display:flex;align-items:center;gap:6px;color:var(--text-muted);font-size:0.82rem;}
+    .hero-meta-item i{color:var(--accent-light);width:14px;text-align:center;}
+    .section-card{background:rgba(17,24,39,0.7);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:1.75rem;margin-bottom:1.5rem;}
+    .section-title{font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+    .section-title i{color:var(--accent-light);}
+    .skills-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+    .s-tag{display:inline-flex;align-items:center;padding:6px 14px;border-radius:100px;font-size:0.8rem;font-weight:600;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.28);color:var(--accent-light);transition:var(--transition);}
+    .s-tag:hover{background:rgba(99,102,241,0.22);transform:translateY(-1px);}
+    .s-tag.green{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.25);color:#6ee7b7;}
+    .s-tag.blue{background:rgba(56,189,248,0.1);border-color:rgba(56,189,248,0.25);color:#7dd3fc;}
+    .s-tag.orange{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.25);color:#fcd34d;}
+    .timeline{position:relative;padding-left:1.5rem;}
+    .timeline::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:rgba(99,102,241,0.2);border-radius:1px;}
+    .timeline-item{position:relative;margin-bottom:1.5rem;}
+    .timeline-item:last-child{margin-bottom:0;}
+    .timeline-item::before{content:'';position:absolute;left:-1.62rem;top:5px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid #0a0f1e;box-shadow:0 0 10px var(--accent-glow);}
+    .timeline-item h4{font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:2px;}
+    .timeline-item .org{color:var(--accent-light);font-size:0.82rem;font-weight:600;}
+    .timeline-item .period{color:var(--text-muted);font-size:0.78rem;margin-top:3px;display:flex;align-items:center;gap:5px;}
+    .timeline-item .desc{color:var(--text-secondary);font-size:0.83rem;margin-top:8px;line-height:1.6;}
+    .sidebar-card{background:rgba(17,24,39,0.7);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.25rem;}
+    .sidebar-card h6{font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem;}
+    .status-stepper{display:flex;flex-direction:column;gap:0;}
+    .step-item{display:flex;align-items:center;gap:12px;padding:10px 0;position:relative;}
+    .step-item:not(:last-child)::after{content:'';position:absolute;left:14px;top:36px;width:2px;height:calc(100% - 20px);background:rgba(255,255,255,0.06);}
+    .step-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--text-muted);flex-shrink:0;transition:var(--transition);z-index:1;background:var(--bg-card);}
+    .step-dot.done{background:rgba(16,185,129,0.15);border-color:#10b981;color:#10b981;}
+    .step-dot.current{background:rgba(99,102,241,0.2);border-color:var(--accent);color:var(--accent-light);box-shadow:0 0 12px var(--accent-glow);}
+    .step-label{font-size:0.82rem;color:var(--text-muted);}
+    .step-label.done{color:var(--success);}
+    .step-label.current{color:#fff;font-weight:600;}
+    .ns-select-status{width:100%;margin-top:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:11px 14px;color:var(--text-primary);font-family:var(--font-main);font-size:0.875rem;outline:none;transition:var(--transition);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+    .ns-select-status:focus{border-color:var(--accent);}
+    .ns-select-status option{background:var(--bg-card);}
+    .update-btn{width:100%;padding:11px;background:var(--accent-grad);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-main);font-size:0.875rem;font-weight:600;cursor:pointer;transition:var(--transition);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px;}
+    .update-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--accent-glow);}
+    .download-btn{width:100%;padding:11px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm);color:#6ee7b7;font-family:var(--font-main);font-size:0.875rem;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:7px;}
+    .download-btn:hover{background:rgba(16,185,129,0.2);}
+    .contact-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);font-size:0.82rem;}
+    .contact-row:last-child{border-bottom:none;}
+    .contact-row i{color:var(--accent-light);width:16px;text-align:center;flex-shrink:0;}
+    .status-pill-display{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:0.82rem;font-weight:600;}
+    .status-pill-display::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;}
+    .sp-Applied{background:rgba(56,189,248,0.1);color:#38bdf8;border:1px solid rgba(56,189,248,0.25);}
+    .sp-Interview{background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);}
+    .sp-Offer{background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);}
+    .sp-Rejected{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25);}
+    .sp-Hired{background:rgba(99,102,241,0.1);color:#818cf8;border:1px solid rgba(99,102,241,0.25);}
+    .toast{display:none;position:fixed;bottom:2rem;right:2rem;padding:13px 20px;border-radius:12px;font-weight:600;font-size:0.875rem;z-index:999;align-items:center;gap:10px;animation:slideUp 0.3s ease;}
+    .toast.show{display:flex;}
+    .toast.success{background:#10b981;color:#fff;box-shadow:0 8px 24px rgba(16,185,129,0.4);}
+    @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    @media(max-width:900px){.detail-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="ns-navbar">
+  <a class="nav-brand" href="../index.html">
+    <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+    Next<span>Step</span>
+  </a>
+  <div class="nav-links">
+    <a href="dashboard.html"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    <a href="login.html">Sign Out</a>
+  </div>
+</nav>
+<div class="breadcrumb-bar">
+  <a href="dashboard.html"><i class="fa fa-grid-2"></i> Dashboard</a>
+  <span class="sep"><i class="fa fa-chevron-right" style="font-size:0.65rem;"></i></span>
+  <span id="breadcrumbName">Candidate Profile</span>
+</div>
+<div class="main-content">
+  <div class="detail-body">
+    <div class="container">
+      <div class="detail-grid">
+        <div>
+          <div class="candidate-hero-card">
+            <div class="big-avatar" id="candidateAvatar">SJ</div>
+            <div class="hero-info" style="flex:1;">
+              <h1 id="candidateName">Sarah Johnson</h1>
+              <div class="job-title" id="candidateTitle">Machine Learning Engineer</div>
+              <div style="margin-top:6px;"><span class="status-pill-display sp-Interview" id="statusDisplay">Interview</span></div>
+              <div class="hero-meta">
+                <div class="hero-meta-item"><i class="fa fa-envelope"></i><span id="candidateEmail">sarah.j@email.com</span></div>
+                <div class="hero-meta-item"><i class="fa fa-location-dot"></i><span id="candidateLoc">New York, NY</span></div>
+                <div class="hero-meta-item"><i class="fa fa-calendar-days"></i><span id="candidateDate">Applied Apr 14</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-title"><i class="fa fa-tags"></i>Skills</div>
+            <div class="skills-cloud" id="skillsCloud"></div>
+          </div>
+          <div class="section-card">
+            <div class="section-title"><i class="fa fa-graduation-cap"></i>Education</div>
+            <div class="timeline" id="eduTimeline"></div>
+          </div>
+          <div class="section-card">
+            <div class="section-title"><i class="fa fa-briefcase"></i>Work Experience</div>
+            <div class="timeline" id="expTimeline"></div>
+          </div>
+        </div>
+        <div>
+          <div class="sidebar-card">
+            <h6>Hiring Pipeline</h6>
+            <div class="status-stepper" id="stepper"></div>
+            <select class="ns-select-status" id="statusSelect">
+              <option value="Applied">Applied</option>
+              <option value="Interview">Interview</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Hired">Hired</option>
+            </select>
+            <button class="update-btn" onclick="updateStatus()"><i class="fa fa-check"></i> Update Status</button>
+          </div>
+          <div class="sidebar-card">
+            <h6>Resume</h6>
+            <button class="download-btn" onclick="downloadResume()"><i class="fa fa-download"></i> Download Resume</button>
+          </div>
+          <div class="sidebar-card">
+            <h6>Contact</h6>
+            <div class="contact-row"><i class="fa fa-envelope"></i><span id="sideEmail">sarah.j@email.com</span></div>
+            <div class="contact-row"><i class="fa fa-phone"></i><span id="sidePhone">+1 (555) 100-2200</span></div>
+            <div class="contact-row"><i class="fa-brands fa-linkedin"></i><span>linkedin.com/in/sarahjohnson</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast success" id="toast"><i class="fa fa-circle-check"></i><span id="toastMsg">Status updated!</span></div>
+<script>
+var candidate = null;
+var cid = parseInt(new URLSearchParams(window.location.search).get('id')) || 1;
+var tagColors = ['', 'green', 'blue', 'orange'];
+var STEPS = ['Applied', 'Interview', 'Offer', 'Hired'];
+
+async function fetchCandidateDetail() {
+  try {
+    const token = localStorage.getItem("ns_token");
+    const res = await fetch(`http://13.53.39.78/api/candidates/${cid}`, {
+      headers: { "Authorization": "Bearer " + token }
+    });
+    if (res.status === 401) { window.location.href = "login.html"; return; }
+    candidate = await res.json();
+    renderPage();
+  } catch (err) {
+    console.error("Detail Load Failed:", err);
+  }
+}
+
+function getInitials(name){return (name || "C").split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();}
+
+function renderStepper(currentStatus){
+  var stepperEl = document.getElementById('stepper');
+  stepperEl.innerHTML = STEPS.map(function(s){
+    var idx = STEPS.indexOf(s);
+    var curIdx = STEPS.indexOf(currentStatus);
+    var isDone = idx < curIdx || (idx === curIdx && currentStatus !== 'Rejected');
+    var isCurrent = s === currentStatus && currentStatus !== 'Rejected';
+    var cls = isDone ? 'done' : (isCurrent ? 'current' : '');
+    return '<div class="step-item"><div class="step-dot '+cls+'"><i class="fa '+(isDone?'fa-check':'fa-circle')+' " style="font-size:0.6rem;"></i></div><span class="step-label '+cls+'">'+s+'</span></div>';
+  }).join('');
+  if(currentStatus === 'Rejected'){
+    stepperEl.innerHTML += '<div class="step-item"><div class="step-dot" style="border-color:#ef4444;color:#ef4444;"><i class="fa fa-xmark" style="font-size:0.6rem;"></i></div><span class="step-label" style="color:#ef4444;">Rejected</span></div>';
+  }
+}
+
+function renderStatusDisplay(st){
+  var el = document.getElementById('statusDisplay');
+  el.className = 'status-pill-display sp-' + st;
+  el.innerHTML = '<span style="width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;margin-right:4px;"></span>' + st;
+}
+
+async function updateStatus(){
+  try {
+    var sel = document.getElementById('statusSelect').value;
+    const token = localStorage.getItem("ns_token");
+    const res = await fetch(`http://13.53.39.78/api/candidates/${cid}/status`, {
+      method: "PUT",
+      headers: { 
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status: sel })
+    });
+    
+    if (res.ok) {
+      candidate.status = sel;
+      renderStepper(sel);
+      renderStatusDisplay(sel);
+      showToast('Status updated to: ' + sel);
+    }
+  } catch (err) {
+    console.error("Update status failed:", err);
+  }
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function(){toast.classList.remove('show');}, 2200);
+}
+
+async function downloadResume(){
+  if (!candidate || !candidate.id) return;
+  window.location.href = `http://13.53.39.78/api/resume/download/${candidate.user_id}`;
+}
+
+function renderPage() {
+  if (!candidate) return;
+  document.getElementById('breadcrumbName').textContent = candidate.name;
+  document.getElementById('candidateName').textContent = candidate.name;
+  document.getElementById('candidateTitle').textContent = candidate.title || "Professional";
+  document.getElementById('candidateEmail').textContent = candidate.email;
+  document.getElementById('candidateLoc').textContent = candidate.location || "Remote";
+  document.getElementById('candidateDate').textContent = 'Applied ' + (candidate.created_at ? new Date(candidate.created_at).toLocaleDateString() : 'Recent');
+  document.getElementById('candidateAvatar').textContent = getInitials(candidate.name);
+  document.getElementById('sideEmail').textContent = candidate.email;
+  document.getElementById('sidePhone').textContent = candidate.phone || "Not Provided";
+  document.getElementById('statusSelect').value = candidate.status || "Applied";
+  
+  renderStatusDisplay(candidate.status || "Applied");
+  renderStepper(candidate.status || "Applied");
+  
+  const skillsList = candidate.skills ? candidate.skills.split(',') : [];
+  document.getElementById('skillsCloud').innerHTML = skillsList.map(function(s,i){return '<span class="s-tag '+tagColors[i%4]+'">'+s.trim()+'</span>';}).join('');
+  
+  // Render Education
+  if (candidate.education && candidate.education.length) {
+    document.getElementById('eduTimeline').innerHTML = candidate.education.map(e => `
+      <div class="timeline-item">
+        <h4>${e.degree}</h4>
+        <div class="org">${e.school}</div>
+        <div class="period"><i class="fa fa-calendar-days"></i> ${e.year}</div>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('eduTimeline').innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">No education listed.</p>';
+  }
+
+  // Render Experience
+  if (candidate.experience && candidate.experience.length) {
+    document.getElementById('expTimeline').innerHTML = candidate.experience.map(e => `
+      <div class="timeline-item">
+        <h4>${e.title}</h4>
+        <div class="org">${e.company}</div>
+        <div class="period"><i class="fa fa-calendar-days"></i> ${e.period}</div>
+        <div class="desc">${e.desc}</div>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('expTimeline').innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">No experience listed.</p>';
+  }
+}
+
+fetchCandidateDetail();
+
+</script>
+</body>
+</html>

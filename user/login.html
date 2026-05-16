@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - NextStep</title>
+  <meta name="description" content="Sign in to your NextStep account.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="nextstep.css">
+  <style>
+    body { display:flex; flex-direction:column; min-height:100vh; }
+    .auth-wrapper { display:flex; flex:1; min-height:100vh; }
+    .auth-left {
+      flex:1;
+      background:linear-gradient(145deg,#0a0f1e 0%,#1a1040 50%,#0f1a35 100%);
+      padding:3rem; display:flex; flex-direction:column; justify-content:space-between;
+      position:relative; overflow:hidden;
+    }
+    .auth-left .orb1{width:350px;height:350px;background:rgba(99,102,241,0.25);top:-80px;left:-80px;}
+    .auth-left .orb2{width:250px;height:250px;background:rgba(139,92,246,0.2);bottom:80px;right:-60px;animation-delay:-3s;}
+    .auth-left .orb3{width:180px;height:180px;background:rgba(56,189,248,0.12);top:50%;left:40%;animation-delay:-5s;}
+    .auth-left-brand a {
+      display:inline-flex;align-items:center;gap:10px;
+      font-family:"Plus Jakarta Sans",sans-serif;font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;
+    }
+    .auth-left-brand .brand-icon {
+      width:40px;height:40px;background:var(--accent-grad);border-radius:10px;
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;
+      box-shadow:0 0 20px var(--accent-glow);
+    }
+    .auth-left-brand span{color:var(--accent-light);}
+    .auth-left-content,.auth-left-brand,.auth-left-footer{position:relative;z-index:1;}
+    .auth-left-content h2{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:#fff;margin-bottom:1rem;line-height:1.2;}
+    .auth-left-content p{color:rgba(255,255,255,0.6);font-size:0.95rem;max-width:340px;line-height:1.7;}
+    .feature-list{margin-top:2rem;display:flex;flex-direction:column;gap:12px;}
+    .feature-item{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.75);font-size:0.875rem;}
+    .feature-item .chk{width:22px;height:22px;background:rgba(99,102,241,0.25);border:1px solid rgba(99,102,241,0.5);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--accent-light);font-size:0.7rem;flex-shrink:0;}
+    .auth-left-footer{color:rgba(255,255,255,0.3);font-size:0.78rem;}
+    .auth-right{width:480px;flex-shrink:0;background:var(--bg-card);display:flex;align-items:center;justify-content:center;padding:3rem 2.5rem;border-left:1px solid var(--border-subtle);}
+    .auth-form-wrap{width:100%;max-width:380px;}
+    .auth-form-wrap h1{font-size:1.75rem;font-weight:800;color:#fff;margin-bottom:0.4rem;}
+    .auth-form-wrap .subtitle{color:var(--text-muted);font-size:0.875rem;margin-bottom:2rem;}
+    .auth-form-wrap .subtitle a{color:var(--accent-light);font-weight:600;}
+    .auth-form-wrap .subtitle a:hover{color:#fff;}
+    .input-wrap{position:relative;margin-bottom:1.1rem;}
+    .input-wrap label{display:block;font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:6px;}
+    .input-wrap input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);padding:13px 42px;color:var(--text-primary);font-family:var(--font-main);font-size:0.9rem;transition:var(--transition);outline:none;}
+    .input-wrap input::placeholder{color:var(--text-muted);}
+    .input-wrap input:focus{border-color:var(--accent);background:rgba(99,102,241,0.06);box-shadow:0 0 0 3px rgba(99,102,241,0.15);}
+    .input-wrap input.is-invalid{border-color:var(--danger);}
+    .input-wrap .field-icon{position:absolute;left:14px;top:38px;color:var(--text-muted);font-size:0.82rem;}
+    .input-wrap .toggle-pwd{position:absolute;right:14px;top:38px;background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;font-size:0.82rem;transition:var(--transition);}
+    .input-wrap .toggle-pwd:hover{color:var(--accent-light);}
+    .field-error{color:#fca5a5;font-size:0.78rem;margin-top:4px;display:none;}
+    .field-error.show{display:block;}
+    .remember-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+    .remember-row label{display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.8rem;cursor:pointer;}
+    .remember-row input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;}
+    .forgot-link{color:var(--accent-light);font-size:0.8rem;font-weight:500;}
+    .forgot-link:hover{color:#fff;}
+    .btn-submit{width:100%;padding:14px;background:var(--accent-grad);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-main);font-size:0.9375rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px var(--accent-glow);}
+    .btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--accent-glow);}
+    .btn-submit:disabled{opacity:0.65;pointer-events:none;}
+    .demo-box{margin-top:1.5rem;padding:14px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text-muted);}
+    .demo-box strong{color:var(--accent-light);}
+    .demo-box a{color:var(--accent-light);cursor:pointer;text-decoration:underline;}
+    #loginError{display:none;padding:12px 14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);margin-bottom:1.25rem;color:#fca5a5;font-size:0.875rem;align-items:center;gap:8px;animation:shake 0.4s ease;}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}60%{transform:translateX(6px)}}
+    .mini-spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+    .btn-spinner{display:none;}
+    .btn-spinner.show{display:inline-block;}
+    @media(max-width:768px){.auth-left{display:none;}.auth-right{width:100%;border-left:none;}}
+  </style>
+</head>
+<body>
+<div class="auth-wrapper">
+  <div class="auth-left">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="auth-left-brand">
+      <a href="../index.html">
+        <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+        Next<span>Step</span>
+      </a>
+    </div>
+    <div class="auth-left-content">
+      <h2>Your next career<br>move starts here</h2>
+      <p>An AI-powered platform connecting top talent with the world best companies, smarter, faster, and with zero friction.</p>
+      <div class="feature-list">
+        <div class="feature-item"><div class="chk"><i class="fa fa-check"></i></div>AI resume parsing and skill extraction</div>
+        <div class="feature-item"><div class="chk"><i class="fa fa-check"></i></div>Smart recruiter dashboard and pipeline</div>
+        <div class="feature-item"><div class="chk"><i class="fa fa-check"></i></div>Real-time hiring status tracking</div>
+        <div class="feature-item"><div class="chk"><i class="fa fa-check"></i></div>Secure cloud file storage</div>
+      </div>
+    </div>
+    <div class="auth-left-footer">2026 NextStep Platform. All rights reserved.</div>
+  </div>
+  <div class="auth-right">
+    <div class="auth-form-wrap page-enter">
+      <h1>Welcome back</h1>
+      <p class="subtitle">Don't have an account? <a href="register.html">Create one free</a></p>
+      <div id="loginError"><i class="fa fa-circle-exclamation"></i><span id="loginErrorMsg"> Invalid email or password.</span></div>
+      <form id="loginForm" novalidate autocomplete="on">
+        <div class="input-wrap">
+          <label for="loginEmail">Email Address</label>
+          <i class="fa fa-envelope field-icon"></i>
+          <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required>
+          <div class="field-error" id="emailErr">Please enter a valid email address.</div>
+        </div>
+        <div class="input-wrap">
+          <label for="loginPassword">Password</label>
+          <i class="fa fa-lock field-icon"></i>
+          <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" required>
+          <button type="button" class="toggle-pwd" id="togglePwd"><i class="fa fa-eye" id="toggleIcon"></i></button>
+          <div class="field-error" id="pwdErr">Please enter your password.</div>
+        </div>
+        <div class="remember-row">
+          <label><input type="checkbox" id="rememberMe"> Remember me</label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <span class="btn-spinner" id="btnSpinner"><div class="mini-spin"></div></span>
+          <i class="fa fa-sign-in-alt" id="btnIcon"></i>
+          <span id="btnLabel">Sign In</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById('togglePwd').addEventListener('click',function(){
+  var inp=document.getElementById('loginPassword');
+  var icon=document.getElementById('toggleIcon');
+  if(inp.type==='password'){inp.type='text';icon.className='fa fa-eye-slash';}
+  else{inp.type='password';icon.className='fa fa-eye';}
+});
+document.getElementById('loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var email=document.getElementById('loginEmail').value.trim();
+  var pwd=document.getElementById('loginPassword').value;
+  var errBox=document.getElementById('loginError');
+  var valid=true;
+  document.getElementById('emailErr').classList.remove('show');
+  document.getElementById('pwdErr').classList.remove('show');
+  if(!email||!/\S+@\S+\.\S+/.test(email)){document.getElementById('emailErr').classList.add('show');document.getElementById('loginEmail').classList.add('is-invalid');valid=false;}
+  if(!pwd){document.getElementById('pwdErr').classList.add('show');document.getElementById('loginPassword').classList.add('is-invalid');valid=false;}
+  if(!valid)return;
+  errBox.style.display='none';
+  var btn=document.getElementById('loginBtn');
+  var spinner=document.getElementById('btnSpinner');
+  var icon=document.getElementById('btnIcon');
+  var label=document.getElementById('btnLabel');
+  btn.disabled=true;
+  spinner.classList.add('show');
+  icon.style.display='none';
+  label.textContent='Signing in...';
+  fetch('http://13.53.39.78/api/auth/login', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email: email, password: pwd})
+  }).then(function(res) {
+    if(!res.ok) {
+        return res.json().then(function(data) { throw new Error(data.detail || 'Invalid email or password'); });
+    }
+    return res.json();
+  }).then(function(data) {
+    localStorage.setItem('ns_token', data.access_token);
+    return fetch('http://13.53.39.78/api/auth/me', {
+      headers: {'Authorization': 'Bearer ' + data.access_token}
+    });
+  }).then(function(res) {
+    return res.json();
+  }).then(function(user) {
+    localStorage.setItem('ns_role', user.role);
+    localStorage.setItem('ns_user', JSON.stringify(user));
+    if(user.role === 'candidate') window.location.href='my-profile.html';
+    else window.location.href='dashboard.html';
+  }).catch(function(err) {
+    btn.disabled=false;spinner.classList.remove('show');icon.style.display='';label.textContent='Sign In';
+    document.getElementById('loginErrorMsg').textContent=' ' + err.message;
+    errBox.style.display='flex';
+  });
+});
+['loginEmail','loginPassword'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){this.classList.remove('is-invalid');});
+});
+</script>
+</body>
+</html>

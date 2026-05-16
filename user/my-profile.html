@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - NextStep</title>
+  <meta name="description" content="View and manage your professional profile on NextStep.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="nextstep.css">
+  <style>
+    .ns-navbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,15,30,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-subtle);}
+    .nav-brand{display:flex;align-items:center;gap:10px;font-family:"Plus Jakarta Sans",sans-serif;font-size:1.2rem;font-weight:800;color:#fff;text-decoration:none;}
+    .nav-brand .brand-icon{width:34px;height:34px;background:var(--accent-grad);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;}
+    .nav-brand span{color:var(--accent-light);}
+    .nav-links{display:flex;align-items:center;gap:8px;}
+    .nav-links a{color:var(--text-muted);font-size:0.85rem;padding:7px 14px;border-radius:8px;transition:var(--transition);}
+    .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.07);}
+    .nav-links a.active{color:#fff;background:rgba(99,102,241,0.15);}
+    .main-content{padding-top:72px;}
+    .profile-hero{padding:4rem 0 3rem;background:linear-gradient(135deg,#0a0f1e 0%,#0f172a 60%,#1a1040 100%);position:relative;overflow:hidden;}
+    .profile-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(99,102,241,0.12),transparent 60%);}
+    .profile-hero .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .profile-hero-inner{display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
+    .avatar-circle{width:90px;height:90px;border-radius:50%;background:var(--accent-grad);display:flex;align-items:center;justify-content:center;font-family:"Plus Jakarta Sans",sans-serif;font-size:2rem;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 0 32px var(--accent-glow);}
+    .profile-info h1{font-size:1.75rem;font-weight:800;color:#fff;margin-bottom:0.25rem;}
+    .profile-info .profile-title{color:var(--accent-light);font-size:0.9rem;font-weight:600;margin-bottom:0.5rem;}
+    .profile-info .profile-email{color:var(--text-muted);font-size:0.85rem;display:flex;align-items:center;gap:6px;}
+    .profile-actions{margin-left:auto;display:flex;gap:10px;align-items:center;}
+    .btn-outline{padding:9px 18px;border:1px solid var(--border-glass);border-radius:var(--radius-sm);color:var(--text-secondary);font-family:var(--font-main);font-size:0.85rem;font-weight:500;cursor:pointer;background:transparent;display:flex;align-items:center;gap:7px;transition:var(--transition);}
+    .btn-outline:hover{border-color:var(--accent);color:#fff;background:rgba(99,102,241,0.1);}
+    .btn-primary-sm{padding:9px 18px;border:none;border-radius:var(--radius-sm);background:var(--accent-grad);color:#fff;font-family:var(--font-main);font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:var(--transition);box-shadow:0 3px 12px var(--accent-glow);}
+    .btn-primary-sm:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--accent-glow);}
+    .stats-strip{display:flex;gap:2px;background:rgba(255,255,255,0.04);border-radius:12px;overflow:hidden;margin-top:2rem;}
+    .stat-item{flex:1;padding:1rem 1.25rem;text-align:center;}
+    .stat-item .num{font-size:1.6rem;font-weight:800;color:#fff;display:block;font-family:"Plus Jakarta Sans",sans-serif;}
+    .stat-item .lbl{font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+    .container{max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .profile-body{padding:3rem 0;}
+    .profile-grid{display:grid;grid-template-columns:2fr 1fr;gap:2rem;align-items:start;}
+    .section-card{background:rgba(17,24,39,0.7);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:1.75rem;margin-bottom:1.5rem;}
+    .section-card-title{font-size:0.85rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+    .section-card-title i{color:var(--accent-light);}
+    .skills-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+    .skill-pill{display:inline-flex;align-items:center;padding:5px 14px;border-radius:100px;font-size:0.78rem;font-weight:600;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.28);color:var(--accent-light);transition:var(--transition);}
+    .skill-pill:hover{background:rgba(99,102,241,0.22);transform:translateY(-1px);}
+    .timeline{position:relative;padding-left:1.5rem;}
+    .timeline::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:rgba(99,102,241,0.2);}
+    .timeline-item{position:relative;margin-bottom:1.5rem;}
+    .timeline-item::before{content:'';position:absolute;left:-1.6rem;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid #0a0f1e;box-shadow:0 0 8px var(--accent-glow);}
+    .timeline-item h4{font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:2px;}
+    .timeline-item .org{color:var(--accent-light);font-size:0.82rem;font-weight:600;}
+    .timeline-item .period{color:var(--text-muted);font-size:0.78rem;margin-top:2px;}
+    .timeline-item .desc{color:var(--text-secondary);font-size:0.83rem;margin-top:6px;line-height:1.6;}
+    .sidebar-card{background:rgba(17,24,39,0.7);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.25rem;}
+    .sidebar-card h6{font-size:0.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem;}
+    .resume-file{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border-subtle);border-radius:10px;margin-bottom:1rem;}
+    .resume-file .file-icon{width:40px;height:40px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fca5a5;font-size:1rem;flex-shrink:0;}
+    .resume-file .file-info{flex:1;overflow:hidden;}
+    .resume-file .file-name{font-size:0.82rem;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .resume-file .file-size{font-size:0.72rem;color:var(--text-muted);}
+    .completeness-bar{height:6px;background:rgba(255,255,255,0.07);border-radius:100px;overflow:hidden;margin-bottom:0.5rem;}
+    .completeness-fill{height:100%;background:var(--accent-grad);border-radius:100px;}
+    .contact-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);font-size:0.82rem;}
+    .contact-row:last-child{border-bottom:none;}
+    .contact-row i{color:var(--accent-light);width:16px;text-align:center;}
+    @media(max-width:900px){.profile-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="ns-navbar">
+  <a class="nav-brand" href="../index.html">
+    <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+    Next<span>Step</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="my-profile.html" class="active">My Profile</a>
+    <a href="login.html">Sign Out</a>
+  </div>
+</nav>
+<div class="main-content">
+  <div class="profile-hero">
+    <div class="container">
+      <div class="profile-hero-inner">
+        <div class="avatar-circle" id="avatarCircle">AM</div>
+        <div class="profile-info">
+          <h1 id="profileName">Alex Morgan</h1>
+          <div class="profile-title" id="profileTitle">Full Stack Developer</div>
+          <div class="profile-email"><i class="fa fa-envelope"></i><span id="profileEmail">alex.morgan@email.com</span></div>
+        </div>
+        <div class="profile-actions">
+          <a href="upload.html"><button class="btn-outline"><i class="fa fa-arrow-up-from-bracket"></i> Re-upload Resume</button></a>
+          <button class="btn-primary-sm" onclick="downloadResume()"><i class="fa fa-download"></i> Download CV</button>
+        </div>
+      </div>
+      <div class="stats-strip">
+        <div class="stat-item"><span class="num" id="statSkills">8</span><span class="lbl">Skills</span></div>
+        <div class="stat-item"><span class="num" id="statEdu">1</span><span class="lbl">Education</span></div>
+        <div class="stat-item"><span class="num" id="statExp">2</span><span class="lbl">Experience</span></div>
+        <div class="stat-item"><span class="num" id="completenessNum">87%</span><span class="lbl">Profile Complete</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="container">
+      <div class="profile-grid">
+        <div>
+          <div class="section-card" id="summaryCard" style="display:none;">
+            <div class="section-card-title"><i class="fa fa-quote-left"></i> Summary</div>
+            <div id="profileSummary" style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;"></div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-title"><i class="fa fa-tags"></i> Skills</div>
+            <div class="skills-cloud" id="skillsCloud"></div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-title"><i class="fa fa-graduation-cap"></i> Education</div>
+            <div class="timeline" id="eduTimeline"></div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-title"><i class="fa fa-briefcase"></i> Experience</div>
+            <div class="timeline" id="expTimeline"></div>
+          </div>
+
+        </div>
+        <div>
+          <div class="sidebar-card">
+            <h6>Resume File</h6>
+            <div class="resume-file">
+              <div class="file-icon"><i class="fa fa-file-pdf"></i></div>
+              <div class="file-info">
+                <div class="file-name" id="resumeFileName">No resume uploaded</div>
+                <div class="file-size" id="resumeFileSize" style="display:none;"></div>
+              </div>
+              <button onclick="downloadResume()" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:0.9rem;" title="Download"><i class="fa fa-download"></i></button>
+            </div>
+            <a href="upload.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;color:var(--accent-light);font-size:0.82rem;font-weight:600;text-decoration:none;transition:var(--transition);">
+              <i class="fa fa-refresh"></i> Update Resume
+            </a>
+          </div>
+          <div class="sidebar-card">
+            <h6>Profile Completeness</h6>
+            <div class="completeness-bar"><div class="completeness-fill" id="completenessFill" style="width:87%"></div></div>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin:0;" id="completenessText">87% complete - Add a summary to reach 100%</p>
+          </div>
+          <div class="sidebar-card">
+            <h6>Contact Info</h6>
+            <div class="contact-row"><i class="fa fa-envelope"></i><span id="contactEmail">alex.morgan@email.com</span></div>
+            <div class="contact-row"><i class="fa fa-phone"></i><span id="contactPhone">+1 (555) 234-5678</span></div>
+            <div class="contact-row" style="display:none;" id="linkedinRow"><i class="fa-brands fa-linkedin"></i><span id="linkedinLink"></span></div>
+            <div class="contact-row" style="display:none;" id="githubRow"><i class="fa-brands fa-github"></i><span id="githubLink"></span></div>
+          </div>
+          <div class="sidebar-card">
+            <h6>Hiring Status</h6>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="status-badge applied">Applied</span>
+              <span style="font-size:0.78rem;color:var(--text-muted);">Updated today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var token = localStorage.getItem('ns_token');
+var user = JSON.parse(localStorage.getItem('ns_user') || '{}');
+
+if (!token) {
+    window.location.href = 'login.html';
+}
+
+function renderProfile(profileData) {
+  var name = user.name || 'New User';
+  var email = user.email || 'user@example.com';
+  
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileTitle').textContent = profileData.job_title || 'Candidate';
+  document.getElementById('profileEmail').textContent = email;
+  document.getElementById('contactEmail').textContent = profileData.contact_email || email;
+  document.getElementById('contactPhone').textContent = profileData.phone || 'Not provided';
+  
+  if(profileData.summary) {
+    document.getElementById('summaryCard').style.display = 'block';
+    document.getElementById('profileSummary').textContent = profileData.summary;
+  }
+  
+  var score = 0;
+  if(profileData.job_title) score += 20;
+  if(profileData.phone) score += 20;
+  if(profileData.skills && profileData.skills.length > 0) score += 20;
+  if(profileData.education && profileData.education.length > 0) score += 20;
+  if(profileData.summary) score += 20;
+  
+  document.getElementById('completenessNum').textContent = score + '%';
+  document.getElementById('completenessFill').style.width = score + '%';
+  if(score < 100) {
+    document.getElementById('completenessText').textContent = score + '% complete - ' + (profileData.summary ? 'Add more skills/edu' : 'Add a summary') + ' to reach 100%';
+  } else {
+    document.getElementById('completenessText').textContent = 'Profile 100% complete!';
+  }
+  
+  if(profileData.resume_filename) document.getElementById('resumeFileName').textContent = profileData.resume_filename;
+  
+  var initials = name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+  document.getElementById('avatarCircle').textContent = initials;
+  
+  var skills = profileData.skills || [];
+  document.getElementById('statSkills').textContent = skills.length;
+  document.getElementById('skillsCloud').innerHTML = skills.map(function(s){return '<span class="skill-pill">'+s.name+'</span>';}).join('') || '<span class="skill-pill">No skills added</span>';
+  
+  var edu = profileData.education || [];
+  document.getElementById('statEdu').textContent = edu.length;
+  document.getElementById('eduTimeline').innerHTML = edu.map(function(e){return '<div class="timeline-item"><h4>'+e.degree+'</h4><div class="org">'+e.school+'</div><div class="period"><i class="fa fa-calendar"></i> '+e.year+'</div></div>';}).join('') || '<p style="color:var(--text-muted);font-size:0.8rem;">No education history.</p>';
+  
+  var exp = profileData.experience || [];
+  document.getElementById('statExp').textContent = exp.length;
+  document.getElementById('expTimeline').innerHTML = exp.map(function(e){
+    if (!e) return '';
+    var title = typeof e === 'string' ? e : (e.job_title || e.title || 'Experience');
+    var company = typeof e === 'object' ? (e.company || '') : '';
+    var period = typeof e === 'object' ? (e.period || '') : '';
+    var desc = typeof e === 'object' ? (e.description || e.desc || '') : '';
+    return '<div class="timeline-item"><h4>'+title+'</h4><div class="org">'+company+'</div><div class="period"><i class="fa fa-calendar"></i> '+period+'</div><div class="desc">'+desc+'</div></div>';
+  }).join('') || '<p style="color:var(--text-muted);font-size:0.8rem;">No experience history.</p>';
+  
+
+}
+
+function init() {
+  fetch('http://13.53.39.78/api/profile/me', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(function(res) {
+    if (!res.ok) throw new Error('Failed to fetch profile');
+    return res.json();
+  })
+  .then(function(data) {
+    renderProfile(data);
+  })
+  .catch(function(err) {
+    console.error(err);
+    renderProfile({}); // Render empty if no profile exists yet
+  });
+}
+
+function downloadResume() {
+  if (!user.id) return alert("User not logged in");
+  
+  fetch('http://13.53.39.78/api/resume/download/' + user.id, {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(res => {
+      if(!res.ok) throw new Error("Resume not found");
+      return res.json();
+  })
+  .then(data => {
+      window.open(data.download_url, '_blank');
+  })
+  .catch(err => alert(err.message));
+}
+
+init();
+</script>
+</body>
+</html>

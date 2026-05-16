@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Resume - NextStep</title>
+  <meta name="description" content="Upload your resume and let AI parse your skills and experience.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="nextstep.css">
+  <style>
+    .ns-navbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,15,30,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-subtle);}
+    .nav-brand{display:flex;align-items:center;gap:10px;font-family:"Plus Jakarta Sans",sans-serif;font-size:1.2rem;font-weight:800;color:#fff;text-decoration:none;}
+    .nav-brand .brand-icon{width:34px;height:34px;background:var(--accent-grad);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;}
+    .nav-brand span{color:var(--accent-light);}
+    .nav-links{display:flex;align-items:center;gap:8px;}
+    .nav-links a{color:var(--text-muted);font-size:0.85rem;padding:7px 14px;border-radius:8px;transition:var(--transition);}
+    .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.07);}
+    .nav-links a.active{color:#fff;background:rgba(99,102,241,0.15);}
+    .main-content{padding-top:80px;}
+    .page-hero{padding:4rem 0 2.5rem;background:linear-gradient(135deg,#0a0f1e,#0f172a);position:relative;overflow:hidden;}
+    .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(99,102,241,0.1) 0%,transparent 60%);}
+    .page-hero .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .page-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#fff;margin-bottom:0.5rem;}
+    .page-hero p{color:var(--text-muted);font-size:0.95rem;max-width:520px;}
+    .container{max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .upload-section{padding:3rem 0;}
+    .upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+    .drop-zone{border:2px dashed rgba(99,102,241,0.35);border-radius:var(--radius-lg);padding:3rem 2rem;text-align:center;transition:var(--transition);cursor:pointer;background:rgba(99,102,241,0.04);position:relative;}
+    .drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:rgba(99,102,241,0.1);box-shadow:0 0 40px rgba(99,102,241,0.15);}
+    .drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .drop-icon{width:72px;height:72px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.75rem;color:var(--accent-light);transition:var(--transition);}
+    .drop-zone:hover .drop-icon{background:rgba(99,102,241,0.2);transform:scale(1.05);}
+    .drop-zone h3{font-size:1.1rem;color:#fff;margin-bottom:0.4rem;}
+    .drop-zone p{font-size:0.83rem;color:var(--text-muted);}
+    .file-types{display:flex;gap:8px;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+    .file-type-badge{padding:4px 12px;border-radius:100px;font-size:0.75rem;font-weight:600;border:1px solid rgba(255,255,255,0.12);color:var(--text-muted);}
+    .file-type-badge.pdf{border-color:rgba(239,68,68,0.4);color:#fca5a5;background:rgba(239,68,68,0.08);}
+    .file-type-badge.docx{border-color:rgba(56,189,248,0.4);color:#7dd3fc;background:rgba(56,189,248,0.08);}
+    .file-selected{display:none;margin-top:1.25rem;padding:12px 16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;align-items:center;gap:10px;text-align:left;}
+    .file-selected.show{display:flex;}
+    .file-selected .file-name{flex:1;font-size:0.85rem;color:#6ee7b7;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .file-selected .remove-file{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.9rem;transition:var(--transition);padding:0;}
+    .file-selected .remove-file:hover{color:var(--danger);}
+    .upload-btn{width:100%;padding:14px;background:var(--accent-grad);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-main);font-size:0.9375rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px var(--accent-glow);margin-top:1.25rem;}
+    .upload-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--accent-glow);}
+    .upload-btn:disabled{opacity:0.5;pointer-events:none;}
+    .progress-wrap{display:none;margin-top:1.25rem;}
+    .progress-wrap.show{display:block;}
+    .progress-label{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-bottom:6px;}
+    .progress-bar{height:5px;background:rgba(255,255,255,0.07);border-radius:100px;overflow:hidden;}
+    .progress-fill{height:100%;width:0;background:var(--accent-grad);border-radius:100px;transition:width 0.3s ease;}
+    .parsing-steps{margin-top:1.25rem;display:none;}
+    .parsing-steps.show{display:block;}
+    .parse-step{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:0.83rem;color:var(--text-muted);}
+    .parse-step .step-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;flex-shrink:0;background:rgba(255,255,255,0.07);}
+    .parse-step.done .step-icon{background:rgba(16,185,129,0.2);color:var(--success);}
+    .parse-step.active .step-icon{background:rgba(99,102,241,0.2);color:var(--accent-light);animation:pulse 1s ease-in-out infinite;}
+    .parse-step.done{color:var(--text-secondary);}
+    .parse-step.active{color:#fff;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+    .results-panel{display:none;}
+    .results-panel.show{display:block;}
+    .results-card{background:rgba(17,24,39,0.8);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.5rem;}
+    .results-card h3{font-size:1rem;font-weight:700;color:#fff;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+    .results-card h3 i{color:var(--accent-light);}
+    .edit-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text-primary);font-family:var(--font-main);font-size:0.875rem;outline:none;transition:var(--transition);margin-bottom:0.75rem;}
+    .edit-input:focus{border-color:var(--accent);background:rgba(99,102,241,0.06);}
+    .tags-input-wrap{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);min-height:48px;cursor:text;}
+    .tags-input-wrap:focus-within{border-color:var(--accent);}
+    .tags-input-wrap input{background:transparent;border:none;outline:none;color:var(--text-primary);font-family:var(--font-main);font-size:0.875rem;min-width:100px;flex:1;}
+    .tags-input-wrap input::placeholder{color:var(--text-muted);}
+    .tag-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:var(--accent-light);padding:3px 10px;border-radius:100px;font-size:0.78rem;font-weight:500;}
+    .tag-pill button{background:none;border:none;color:var(--accent-light);cursor:pointer;padding:0;font-size:0.7rem;line-height:1;opacity:0.7;}
+    .tag-pill button:hover{opacity:1;color:var(--danger);}
+    .edu-item,.exp-item{background:rgba(255,255,255,0.03);border:1px solid var(--border-subtle);border-radius:10px;padding:1rem;margin-bottom:0.75rem;display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+    .add-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);color:var(--accent-light);padding:7px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:var(--transition);margin-top:0.5rem;}
+    .add-btn:hover{background:rgba(99,102,241,0.2);}
+    .save-btn{width:100%;padding:14px;background:var(--accent-grad);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-main);font-size:0.9375rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px var(--accent-glow);margin-top:1.5rem;}
+    .save-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--accent-glow);}
+    .success-toast{display:none;position:fixed;bottom:2rem;right:2rem;background:#10b981;color:#fff;padding:14px 20px;border-radius:12px;font-weight:600;font-size:0.875rem;z-index:999;box-shadow:0 8px 24px rgba(16,185,129,0.4);align-items:center;gap:10px;animation:slideUp 0.3s ease;}
+    .success-toast.show{display:flex;}
+    @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    .mini-spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+  </style>
+</head>
+<body>
+<nav class="ns-navbar">
+  <a class="nav-brand" href="../index.html">
+    <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+    Next<span>Step</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="upload.html" class="active">Upload</a>
+    <a href="my-profile.html">My Profile</a>
+    <a href="login.html">Sign Out</a>
+  </div>
+</nav>
+<div class="main-content">
+  <div class="page-hero">
+    <div class="container">
+      <p style="font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:0.5rem;">Resume Parser</p>
+      <h1>Upload Your Resume</h1>
+      <p>Our AI will extract your skills, education, and experience automatically. You can review and edit everything before saving.</p>
+    </div>
+  </div>
+  <div class="upload-section">
+    <div class="container">
+      <div class="upload-grid">
+        <div>
+          <div class="drop-zone" id="dropZone">
+            <input type="file" id="fileInput" accept=".pdf,.docx" hidden>
+            <div class="drop-icon"><i class="fa fa-cloud-arrow-up"></i></div>
+            <h3>Drop your resume here</h3>
+            <p>or click to browse files from your computer</p>
+            <div class="file-types">
+              <span class="file-type-badge pdf"><i class="fa fa-file-pdf me-1"></i>PDF</span>
+              <span class="file-type-badge docx"><i class="fa fa-file-word me-1"></i>DOCX</span>
+            </div>
+          </div>
+          <div class="file-selected" id="fileSelected">
+            <i class="fa fa-file-lines" style="color:var(--accent-light);font-size:1.1rem;"></i>
+            <span class="file-name" id="fileName"></span>
+            <button class="remove-file" onclick="removeFile()" title="Remove file"><i class="fa fa-xmark"></i></button>
+          </div>
+          <div class="progress-wrap" id="progressWrap">
+            <div class="progress-label"><span id="progressLabel">Uploading...</span><span id="progressPct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          </div>
+          <div class="parsing-steps" id="parsingSteps">
+            <div class="parse-step" id="step1"><div class="step-icon"><i class="fa fa-check"></i></div>Reading document structure</div>
+            <div class="parse-step" id="step2"><div class="step-icon"><i class="fa fa-check"></i></div>Extracting personal information</div>
+            <div class="parse-step" id="step3"><div class="step-icon"><i class="fa fa-check"></i></div>Identifying skills and competencies</div>
+            <div class="parse-step" id="step4"><div class="step-icon"><i class="fa fa-check"></i></div>Parsing education history</div>
+            <div class="parse-step" id="step5"><div class="step-icon"><i class="fa fa-check"></i></div>Extracting work experience</div>
+          </div>
+          <button class="upload-btn" id="uploadBtn" onclick="startUpload()">
+            <i class="fa fa-wand-magic-sparkles"></i> Parse with AI
+          </button>
+        </div>
+        <div class="results-panel" id="resultsPanel">
+          <div class="results-card">
+            <h3><i class="fa fa-user-circle"></i> Personal Information</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <input class="edit-input" id="parsedName" placeholder="Full Name">
+              <input class="edit-input" id="parsedTitle" placeholder="Job Title">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <input class="edit-input" id="parsedEmail" placeholder="Email">
+              <input class="edit-input" id="parsedPhone" placeholder="Phone">
+            </div>
+            <textarea class="edit-input" id="parsedSummary" placeholder="Professional Summary" style="height:100px;resize:vertical;"></textarea>
+          </div>
+          <div class="results-card">
+            <h3><i class="fa fa-tags"></i> Skills</h3>
+            <div class="tags-input-wrap" id="skillsWrap">
+              <input type="text" id="skillInput" placeholder="Add a skill and press Enter...">
+            </div>
+            <p style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;">Press Enter to add each skill</p>
+          </div>
+          <div class="results-card">
+            <h3><i class="fa fa-graduation-cap"></i> Education</h3>
+            <div id="eduList"></div>
+            <button class="add-btn" onclick="addEdu()"><i class="fa fa-plus"></i> Add Education</button>
+          </div>
+          <div class="results-card">
+            <h3><i class="fa fa-briefcase"></i> Experience</h3>
+            <div id="expList"></div>
+            <button class="add-btn" onclick="addExp()"><i class="fa fa-plus"></i> Add Experience</button>
+          </div>
+
+          <button class="save-btn" onclick="saveProfile()">
+            <i class="fa fa-floppy-disk"></i> Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="success-toast" id="successToast"><i class="fa fa-circle-check"></i> Profile saved successfully!</div>
+<script>
+var selectedFile=null;
+var skills=[];
+var education=[];
+var experience=[];
+var token = localStorage.getItem('ns_token');
+
+if (!token) {
+    window.location.href = 'login.html';
+}
+
+var dropZone=document.getElementById('dropZone');
+var fileInput=document.getElementById('fileInput');
+
+dropZone.addEventListener('click',function(){fileInput.click();});
+dropZone.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('drag-over');});
+dropZone.addEventListener('dragleave',function(){this.classList.remove('drag-over');});
+dropZone.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('drag-over');var f=e.dataTransfer.files[0];if(f)handleFile(f);});
+fileInput.addEventListener('change',function(){if(this.files[0])handleFile(this.files[0]);});
+
+function handleFile(f){
+  var ext=f.name.split('.').pop().toLowerCase();
+  if(ext!=='pdf'&&ext!=='docx'){alert('Only PDF and DOCX files are accepted.');return;}
+  selectedFile=f;
+  document.getElementById('fileName').textContent=f.name;
+  document.getElementById('fileSelected').classList.add('show');
+  document.getElementById('uploadBtn').disabled=false;
+}
+function removeFile(){
+  selectedFile=null;
+  document.getElementById('fileSelected').classList.remove('show');
+  document.getElementById('fileName').textContent='';
+  fileInput.value='';
+}
+function startUpload(){
+  if(!selectedFile){alert('Please select a file first.');return;}
+  document.getElementById('uploadBtn').innerHTML='<div class="mini-spin"></div> Uploading to AWS & Parsing...';
+  document.getElementById('uploadBtn').disabled=true;
+  
+  var formData = new FormData();
+  formData.append('file', selectedFile);
+
+  fetch('http://13.53.39.78/api/resume/upload', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token },
+      body: formData
+  })
+  .then(function(res) {
+      if(!res.ok) throw new Error("Upload failed. Make sure you are a candidate.");
+      return res.json();
+  })
+  .then(function(data) {
+      var parsed = data.parsed_data || data;
+      document.getElementById('parsedTitle').value = parsed.job_title || '';
+      document.getElementById('parsedPhone').value = parsed.phone || '';
+      document.getElementById('parsedEmail').value = parsed.contact_email || '';
+      document.getElementById('parsedSummary').value = parsed.summary || '';
+      
+      skills = parsed.skills || [];
+      education = parsed.education || [];
+      experience = parsed.experience || [];
+      courses = parsed.courses || [];
+      projects = parsed.projects || [];
+      
+      var user = JSON.parse(localStorage.getItem('ns_user') || '{}');
+      document.getElementById('parsedName').value = user.name || '';
+      document.getElementById('parsedEmail').value = user.email || '';
+      
+      showResults();
+  })
+  .catch(function(err) {
+      alert(err.message);
+      document.getElementById('uploadBtn').innerHTML='<i class="fa fa-wand-magic-sparkles"></i> Parse with AI';
+      document.getElementById('uploadBtn').disabled=false;
+  });
+}
+function showResults(){
+  document.getElementById('resultsPanel').classList.add('show');
+  renderSkills();renderEdu();renderExp();
+  document.getElementById('uploadBtn').innerHTML='<i class="fa fa-check"></i> Parsed Successfully';
+  document.getElementById('resultsPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderSkills(){
+  var wrap=document.getElementById('skillsWrap');
+  var inp=document.getElementById('skillInput');
+  var existing=wrap.querySelectorAll('.tag-pill');
+  existing.forEach(function(e){e.remove();});
+  skills.forEach(function(s,i){
+    var pill=document.createElement('span');
+    pill.className='tag-pill';
+    pill.innerHTML=s+'<button onclick="removeSkill('+i+')"><i class="fa fa-xmark"></i></button>';
+    wrap.insertBefore(pill,inp);
+  });
+}
+document.getElementById('skillInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&this.value.trim()){e.preventDefault();skills.push(this.value.trim());this.value='';renderSkills();}
+});
+function removeSkill(i){skills.splice(i,1);renderSkills();}
+function renderEdu(){
+  var list=document.getElementById('eduList');
+  list.innerHTML=education.map(function(e,i){
+    return '<div class="edu-item"><input class="edit-input" value="'+(e.degree||'')+'" placeholder="Degree" onchange="education['+i+'].degree=this.value" style="margin:0"><input class="edit-input" value="'+(e.school||e.institution||'')+'" placeholder="School" onchange="education['+i+'].school=this.value" style="margin:0"><input class="edit-input" value="'+(e.year||'')+'" placeholder="Year" onchange="education['+i+'].year=this.value" style="margin:0;grid-column:1/-1"></div>';
+  }).join('');
+}
+function addEdu(){education.push({degree:'',school:'',year:''});renderEdu();}
+function renderExp(){
+  var list=document.getElementById('expList');
+  list.innerHTML=experience.map(function(e,i){
+    if (!e) return ''; // Skip if element is null or undefined
+    return '<div class="exp-item"><input class="edit-input" value="'+(e.job_title||e.title||'')+'" placeholder="Job Title" onchange="experience['+i+'].job_title=this.value" style="margin:0"><input class="edit-input" value="'+(e.company||'')+'" placeholder="Company" onchange="experience['+i+'].company=this.value" style="margin:0"><input class="edit-input" value="'+(e.period||'')+'" placeholder="Period" onchange="experience['+i+'].period=this.value" style="margin:0"><input class="edit-input" value="'+(e.description||e.desc||'')+'" placeholder="Description" onchange="experience['+i+'].description=this.value" style="margin:0"></div>';
+  }).join('');
+}
+function addExp(){experience.push({job_title:'',company:'',period:'',description:''});renderExp();}
+
+function saveProfile(){
+  var btn = document.querySelector('.save-btn');
+  btn.innerHTML = '<div class="mini-spin"></div> Saving...';
+  
+  var payload = {
+      job_title: document.getElementById('parsedTitle').value,
+      phone: document.getElementById('parsedPhone').value,
+      contact_email: document.getElementById('parsedEmail').value,
+      summary: document.getElementById('parsedSummary').value,
+      skills: skills,
+      education: education.map(function(e) {
+          return { degree: e.degree || '', school: e.school || e.institution || '', year: e.year || '' };
+      }),
+      experience: experience.map(function(e) { 
+          if (!e) return { job_title: '', company: '', period: '', description: '' };
+          return { job_title: e.job_title || e.title || '', company: e.company || '', period: e.period || '', description: e.description || e.desc || '' }
+      })
+  };
+  
+  fetch('http://13.53.39.78/api/profile/me', {
+      method: 'PUT',
+      headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(payload)
+  })
+  .then(function(res) {
+      if(!res.ok) throw new Error("Failed to save profile");
+      var toast=document.getElementById('successToast');
+      toast.classList.add('show');
+      setTimeout(function(){toast.classList.remove('show');window.location.href='my-profile.html';},1500);
+  })
+  .catch(function(err) {
+      alert(err.message);
+      btn.innerHTML = '<i class="fa fa-floppy-disk"></i> Save Profile';
+  });
+}
+</script>
+</body>
+</html>

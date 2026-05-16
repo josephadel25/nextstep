@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "80:80"
+    env_file:
+      - ./backend/.env
+    environment:
+      - AI_SERVICE_URL=http://ai-service:8001/parse
+    depends_on:
+      - ai-service
+
+  ai-service:
+    build: ./ai_service
+    env_file:
+      - ./backend/.env # Reuse the same AWS credentials
+    environment:
+      - MODEL_DIR=/app/model
+    volumes:
+      - ./cv-extractor-new:/app/model
+    # Port 8001 is not exposed to the host, only accessible by backend inside the network
+    expose:
+      - "8001"
