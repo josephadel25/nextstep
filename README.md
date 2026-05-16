@@ -1,5 +1,7 @@
 # NextStep - AI Resume & Candidate Intelligence Platform
 
+🚀 **Live Demo:** [http://13.53.39.78:8080/](http://13.53.39.78:8080/)
+
 NextStep (also known as HireFlow) is an AI-powered recruitment platform designed to streamline the hiring process. It automatically extracts, structures, and organizes information from candidate resumes to significantly reduce the manual effort of resume screening, making candidate comparison faster and more efficient.
 
 ## 🌟 Key Features
